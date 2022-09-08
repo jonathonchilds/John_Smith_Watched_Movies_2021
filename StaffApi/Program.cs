@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace staffapi
+namespace John_Smith_Watched_Movies_2021
 {
     public class Program
     {
