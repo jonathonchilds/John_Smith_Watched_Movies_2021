@@ -14,67 +14,67 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Swagger;
 
-namespace staffapi
+namespace John_Smith_Watched_Movies_2021
 {
-  public class Startup
-  {
-    public Startup(IConfiguration configuration)
+    public class Startup
     {
-      Configuration = configuration;
-      new DatabaseContext().Database.Migrate();
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+            new DatabaseContext().Database.Migrate();
+        }
+
+        public IConfiguration Configuration { get; }
+
+        // This method gets called by the runtime. Use this method to add services to the container.
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddCors();
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+            .AddJsonOptions(options =>
+            {
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            });
+            services.AddDbContext<DatabaseContext>();
+            // Register the Swagger generator, defining 1 or more Swagger documents
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "SDG Mock Employee Database", Version = "v1" });
+            });
+
+        }
+
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        {
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
+            }
+
+            app.UseHttpsRedirection();
+            app.UseCors(builder =>
+              builder
+                  .AllowAnyHeader()
+                  .AllowAnyMethod()
+                  .AllowAnyOrigin()
+                  .AllowCredentials()
+                  );
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), 
+            // specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "SDG Mock Employee Database API");
+                c.RoutePrefix = string.Empty;
+            });
+            app.UseMvc();
+        }
     }
-
-    public IConfiguration Configuration { get; }
-
-    // This method gets called by the runtime. Use this method to add services to the container.
-    public void ConfigureServices(IServiceCollection services)
-    {
-      services.AddCors();
-      services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-      .AddJsonOptions(options =>
-      {
-        options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-      });
-      services.AddDbContext<DatabaseContext>();
-      // Register the Swagger generator, defining 1 or more Swagger documents
-      services.AddSwaggerGen(c =>
-      {
-        c.SwaggerDoc("v1", new Info { Title = "SDG Mock Employee Database", Version = "v1" });
-      });
-
-    }
-
-    // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-    public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-    {
-      if (env.IsDevelopment())
-      {
-        app.UseDeveloperExceptionPage();
-      }
-      else
-      {
-        // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-        app.UseHsts();
-      }
-
-      app.UseHttpsRedirection();
-      app.UseCors(builder =>
-        builder
-            .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowAnyOrigin()
-            .AllowCredentials()
-            );
-      app.UseSwagger();
-
-      // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), 
-      // specifying the Swagger JSON endpoint.
-      app.UseSwaggerUI(c =>
-      {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "SDG Mock Employee Database API");
-        c.RoutePrefix = string.Empty;
-      });
-      app.UseMvc();
-    }
-  }
 }
