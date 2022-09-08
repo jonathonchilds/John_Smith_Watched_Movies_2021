@@ -11,11 +11,11 @@ namespace John_Smith_Watched_Movies_2021.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CompanyController : ControllerBase
+    public class MovieController : ControllerBase
     {
         private readonly DatabaseContext _context;
 
-        public CompanyController(DatabaseContext context)
+        public MovieController(DatabaseContext context)
         {
             _context = context;
         }
